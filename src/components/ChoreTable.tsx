@@ -1,25 +1,18 @@
 import { useEffect, useState } from "react";
-import { createClient } from "@supabase/supabase-js";
 import Checkbox from "./Checkbox";
 import Button from "./Button";
-
-const apiUrl = import.meta.env.VITE_URL_KEY;
-
-const apiKey = import.meta.env.VITE_API_KEY;
-
-const supabase = createClient(apiUrl, apiKey);
+import { getChores } from "../supabase/getters";
 
 function ChoreTable() {
   const [chores, setChores] = useState([]);
 
   useEffect(() => {
-    getChore();
+    async function fetchChores() {
+      const Chores = await getChores();
+      setChores(Chores);
+    }
+    fetchChores();
   }, []);
-
-  async function getChore() {
-    let { data: Chores, error } = await supabase.from("Chores").select("*");
-    setChores(Chores);
-  }
 
   const [score, setScore] = useState(0);
   const [checked, setChecked] = useState([]);
