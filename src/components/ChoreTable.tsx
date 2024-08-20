@@ -2,8 +2,11 @@ import { useEffect, useState } from "react";
 import Checkbox from "./Checkbox";
 import Button from "./Button";
 import { getChores } from "../supabase/getters";
+import { useSelector } from "react-redux";
+import { setPoints } from "../supabase/setters";
 
 function ChoreTable() {
+  const users = useSelector((state) => state.users.value);
   const [chores, setChores] = useState([]);
 
   useEffect(() => {
@@ -25,6 +28,8 @@ function ChoreTable() {
       totalPoints += chores[task].point_amount;
     });
     setScore(score + totalPoints);
+    const activeUser = users.find((user) => user.active);
+    setPoints(totalPoints, activeUser);
     setVersion(version + 1);
     setChecked([]);
   };
