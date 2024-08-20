@@ -21,6 +21,15 @@ function ChoreTable() {
   const [checked, setChecked] = useState([]);
   const [version, setVersion] = useState(0);
 
+  useEffect(() => {
+    const points = users.map((user) => user.points);
+    setScore(
+      points.reduce(function (a, b) {
+        return a + b;
+      }, 0)
+    );
+  }, [users]);
+
   const handleSubmit = (event) => {
     event.preventDefault();
     let totalPoints = 0;
@@ -62,9 +71,8 @@ function ChoreTable() {
         <Button onClick={undefined}>Add chore</Button>
         <ul className="flex flex-col gap-2">
           {chores.map((chore, index) => (
-            <li>
+            <li key={chore.chore_name}>
               <Checkbox
-                key={chore.chore_name}
                 label={chore.chore_name}
                 points={chore.point_amount}
                 onChange={() => handleCheckbox(index)}
